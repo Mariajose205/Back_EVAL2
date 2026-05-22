@@ -51,7 +51,6 @@ jobs:
             # Levantar el Backend apuntando a la IP especial de host en Docker
             docker run -d --name innovatech-api \
               --network innovatech-net \
-              --add-host=innovatech-db:172.17.0.1 \
               -p 3000:3000 \
               -e DB_HOST=innovatech-db \
               -e DB_USER=root \
