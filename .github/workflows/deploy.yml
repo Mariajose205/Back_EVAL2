@@ -35,7 +35,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # Asegurar que el contenedor corra en la misma red que la Base de Datos
+            # Asegurar que la red lógica exista
             docker network create innovatech-net || true
             
             # Detener y eliminar contenedor anterior si existe
@@ -48,9 +48,10 @@ jobs:
             # Descargar la nueva versión desde Docker Hub
             docker pull ${{ secrets.DOCKER_USERNAME }}/innovatech-backend:latest
             
-            # Levantar el Backend conectado a MySQL y en la misma red lógica
+            # Levantar el Backend apuntando a la IP especial de host en Docker
             docker run -d --name innovatech-api \
               --network innovatech-net \
+              --add-host=innovatech-db:172.17.0.1 \
               -p 3000:3000 \
               -e DB_HOST=innovatech-db \
               -e DB_USER=root \
